@@ -54,6 +54,7 @@ export class YtPlayerDirective implements OnInit, AfterViewInit {
       this._nativePlayer.cueVideoById(value);
       if (this._autoPlay) {
         this._nativePlayer.playVideo();
+        this._nativePlayer.setVolume(this._volume);
       }
     }
     this._videoId = value;
