@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ngx-ytplayer';
+  videoId = 'oCR62O7ijBg';
+  controls = true;
+  volume = 100;
 }
