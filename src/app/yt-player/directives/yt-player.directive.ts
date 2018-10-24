@@ -28,7 +28,10 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
   private _loop = false;
   private _showControls = true;
   private _showFullScreenButton = false;
+  private _showYoutubeLogo = false;
+  private _showRelatedVideos = false;
   private _volume = 100;
+  private _enableKB = true;
   // #endregion
 
   // #region Public Properties
@@ -117,6 +120,51 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
   }
   // #endregion
 
+  // #region 啟用鍵盤控制
+  public get enableKB() {
+    return this._enableKB;
+  }
+
+  @Input()
+  public set enableKB(value: boolean) {
+    this._enableKB = value;
+    if (this.nativePlayer) {
+      this.destroyPlayer();
+      this.initPlayer();
+    }
+  }
+  // #endregion
+
+  // #region 顯示相關影片
+  public get showRelatedVideos() {
+    return this._showRelatedVideos;
+  }
+
+  @Input()
+  public set showRelatedVideos(value: boolean) {
+    this._showRelatedVideos = value;
+    if (this.nativePlayer) {
+      this.destroyPlayer();
+      this.initPlayer();
+    }
+  }
+  // #endregion
+
+  // #region Youtube Logo
+  public get showYoutubeLogo() {
+    return this._showYoutubeLogo;
+  }
+
+  @Input()
+  public set showYoutubeLogo(value: boolean) {
+    this._showYoutubeLogo = value;
+    if (this.nativePlayer) {
+      this.destroyPlayer();
+      this.initPlayer();
+    }
+  }
+  // #endregion
+
   // #region 全螢幕按鈕
   public get showFullScreenButton() {
     return this._showFullScreenButton;
@@ -152,6 +200,30 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
   public volumeChange = new EventEmitter<number>();
   // #endregion
 
+  // #region 播放進度
+  public get currentTime() {
+    if (this._nativePlayer) {
+      return this._nativePlayer.getCurrentTime();
+    }
+    return 0;
+  }
+
+  @Output()
+  public currentTimeChange = new EventEmitter<number>();
+  // #endregion
+
+  // #region 播放總時長
+  public get duration() {
+    if (this._nativePlayer) {
+      return this._nativePlayer.getDuration();
+    }
+    return 0;
+  }
+
+  @Output()
+  public durationChange = new EventEmitter<number>();
+  // #endregion
+
   // #region 播放器事件
   @Output()
   public nativeError = new EventEmitter<YT.OnErrorEvent>();
@@ -173,6 +245,16 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
     const volumeChecker = timer(0, 100).subscribe(x => {
       if (this._nativePlayer) {
         this.volumeChange.emit(this.volume);
+      }
+    });
+    const currentTimeChecker = timer(0, 100).subscribe(x => {
+      if (this._nativePlayer) {
+        this.currentTimeChange.emit(this.currentTime);
+      }
+    });
+    const durationChecker = timer(0, 100).subscribe(x => {
+      if (this._nativePlayer) {
+        this.durationChange.emit(this.duration);
       }
     });
   }
@@ -223,12 +305,11 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
       height: '100%',
       playerVars: {
         controls: this._showControls ? 1 : 0,
-        disablekb: 1,
+        disablekb: this._enableKB ? 0 : 1,
         enablejsapi: 1,
         fs: this._showFullScreenButton ? 1 : 0,
-        modestbranding: 1,
-        rel: 0,
-        showinfo: 0,
+        modestbranding: this._showYoutubeLogo ? 0 : 1,
+        rel: this._showRelatedVideos ? 1 : 0,
         iv_load_policy: 3
       },
       events: {
@@ -283,4 +364,22 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   // #endregion
+
+  public seekTo(time: number): void {
+    if (this._nativePlayer) {
+      this._nativePlayer.seekTo(time, true);
+    }
+  }
+
+  public play(): void {
+    if (this._nativePlayer) {
+      this._nativePlayer.playVideo();
+    }
+  }
+
+  public pause(): void {
+    if (this._nativePlayer) {
+      this._nativePlayer.pauseVideo();
+    }
+  }
 }
