@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PlayerState } from './yt-player/models/playerState';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +11,8 @@ export class AppComponent {
   videoId = 'oCR62O7ijBg';
   controls = true;
   volume = 100;
+
+  eventChange(event) {
+    console.log(PlayerState[event]);
+  }
 }
