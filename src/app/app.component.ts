@@ -34,4 +34,11 @@ export class AppComponent {
       this.currentTime = currentTime;
     }
   }
+
+  play() {
+    this.player.play();
+  }
+  pause() {
+    this.player.pause();
+  }
 }

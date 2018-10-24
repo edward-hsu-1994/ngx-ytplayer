@@ -28,6 +28,8 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
   private _loop = false;
   private _showControls = true;
   private _showFullScreenButton = false;
+  private _showYoutubeLogo = false;
+  private _showRelatedVideos = false;
   private _volume = 100;
   private _enableKB = true;
   // #endregion
@@ -126,6 +128,36 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   public set enableKB(value: boolean) {
     this._enableKB = value;
+    if (this.nativePlayer) {
+      this.destroyPlayer();
+      this.initPlayer();
+    }
+  }
+  // #endregion
+
+  // #region 顯示相關影片
+  public get showRelatedVideos() {
+    return this._showRelatedVideos;
+  }
+
+  @Input()
+  public set showRelatedVideos(value: boolean) {
+    this._showRelatedVideos = value;
+    if (this.nativePlayer) {
+      this.destroyPlayer();
+      this.initPlayer();
+    }
+  }
+  // #endregion
+
+  // #region Youtube Logo
+  public get showYoutubeLogo() {
+    return this._showYoutubeLogo;
+  }
+
+  @Input()
+  public set showYoutubeLogo(value: boolean) {
+    this._showYoutubeLogo = value;
     if (this.nativePlayer) {
       this.destroyPlayer();
       this.initPlayer();
@@ -276,8 +308,8 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
         disablekb: this._enableKB ? 0 : 1,
         enablejsapi: 1,
         fs: this._showFullScreenButton ? 1 : 0,
-        modestbranding: 1,
-        rel: 0,
+        modestbranding: this._showYoutubeLogo ? 0 : 1,
+        rel: this._showRelatedVideos ? 1 : 0,
         iv_load_policy: 3
       },
       events: {
@@ -336,6 +368,18 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
   public seekTo(time: number): void {
     if (this._nativePlayer) {
       this._nativePlayer.seekTo(time, true);
+    }
+  }
+
+  public play(): void {
+    if (this._nativePlayer) {
+      this._nativePlayer.playVideo();
+    }
+  }
+
+  public pause(): void {
+    if (this._nativePlayer) {
+      this._nativePlayer.pauseVideo();
     }
   }
 }

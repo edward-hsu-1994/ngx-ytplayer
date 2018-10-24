@@ -1,10 +1,13 @@
-<div #player ytPlayer [videoId]="videoId" style="height:800px;" [(volume)]="volume" [autoPlay]="false"
+<div #player ytPlayer [videoId]="videoId" style="height:800px;pointer-events: none;" [(volume)]="volume" [autoPlay]="false"
   [showFullScreenButton]="false" [showControls]="controls" [loop]="true" (stateChange)="eventChange($event)"
   (currentTimeChange)="updateCurrentTime($event)" (durationChange)="duration=$event" [enableKB]="true"></div>
 <input [(ngModel)]="videoId" />
 <input type="checkbox" [(ngModel)]="controls">Controls
 音量: <input min="0" max="100" type="range" [(ngModel)]="volume" />
 
+
+<button (click)="play()">Play</button>
+<button (click)="pause()">Pause</button>
 播放進度: <input min="0" [max]="duration" type="range" [value]="currentTime" (mousedown)="seek=true" (mouseup)="seek=false"
   (change)="seekTo($event)">
 {{currentTime.toString().split('.')[0]}} / {{duration}}
