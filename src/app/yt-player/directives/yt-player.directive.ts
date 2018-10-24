@@ -152,6 +152,30 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
   public volumeChange = new EventEmitter<number>();
   // #endregion
 
+  // #region 播放進度
+  public get currentTime() {
+    if (this._nativePlayer) {
+      return this._nativePlayer.getCurrentTime();
+    }
+    return 0;
+  }
+
+  @Output()
+  public currentTimeChange = new EventEmitter<number>();
+  // #endregion
+
+  // #region 播放總時長
+  public get duration() {
+    if (this._nativePlayer) {
+      return this._nativePlayer.getDuration();
+    }
+    return 0;
+  }
+
+  @Output()
+  public durationChange = new EventEmitter<number>();
+  // #endregion
+
   // #region 播放器事件
   @Output()
   public nativeError = new EventEmitter<YT.OnErrorEvent>();
@@ -173,6 +197,16 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
     const volumeChecker = timer(0, 100).subscribe(x => {
       if (this._nativePlayer) {
         this.volumeChange.emit(this.volume);
+      }
+    });
+    const currentTimeChecker = timer(0, 100).subscribe(x => {
+      if (this._nativePlayer) {
+        this.currentTimeChange.emit(this.currentTime);
+      }
+    });
+    const durationChecker = timer(0, 100).subscribe(x => {
+      if (this._nativePlayer) {
+        this.durationChange.emit(this.duration);
       }
     });
   }
@@ -283,4 +317,10 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   // #endregion
+
+  public seekTo(time: number): void {
+    if (this._nativePlayer) {
+      this._nativePlayer.seekTo(time, true);
+    }
+  }
 }
