@@ -29,6 +29,7 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
   private _showControls = true;
   private _showFullScreenButton = false;
   private _volume = 100;
+  private _enableKB = true;
   // #endregion
 
   // #region Public Properties
@@ -110,6 +111,21 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   public set showControls(value: boolean) {
     this._showControls = value;
+    if (this.nativePlayer) {
+      this.destroyPlayer();
+      this.initPlayer();
+    }
+  }
+  // #endregion
+
+  // #region 啟用鍵盤控制
+  public get enableKB() {
+    return this._enableKB;
+  }
+
+  @Input()
+  public set enableKB(value: boolean) {
+    this._enableKB = value;
     if (this.nativePlayer) {
       this.destroyPlayer();
       this.initPlayer();
@@ -257,12 +273,11 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
       height: '100%',
       playerVars: {
         controls: this._showControls ? 1 : 0,
-        disablekb: 1,
+        disablekb: this._enableKB ? 0 : 1,
         enablejsapi: 1,
         fs: this._showFullScreenButton ? 1 : 0,
         modestbranding: 1,
         rel: 0,
-        showinfo: 0,
         iv_load_policy: 3
       },
       events: {
