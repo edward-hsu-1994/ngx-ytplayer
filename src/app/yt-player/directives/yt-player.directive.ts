@@ -276,6 +276,8 @@ export class YtPlayerDirective implements OnInit, AfterViewInit, OnDestroy {
       js.id = youtubeElId;
       js.src = '//www.youtube.com/iframe_api';
       scripts.parentNode.insertBefore(js, youtubeScriptEl);
+    } else {
+      this.updateStatus(PlayerState.SDK_Loaded);
     }
   }
 
