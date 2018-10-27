@@ -10,8 +10,8 @@ import {
   OnDestroy
 } from '@angular/core';
 import { Subject, timer } from 'rxjs';
-import { collectBuffer } from '../rx-extensions/collectBuffer';
-import { PlayerState } from '../models/playerState';
+import { collectBuffer } from '../rx-extensions';
+import { PlayerState } from '../models';
 import { v4 as uuid } from 'uuid';
 
 @Directive({

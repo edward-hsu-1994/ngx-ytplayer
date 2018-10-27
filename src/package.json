@@ -1,0 +1,24 @@
+{
+  "name": "ngx-ytplayer",
+  "version": "1.0.0",
+  "author": "XuPeiYao <st89382000@gmail.com> (https://xpy.gofa.cloud/)",
+  "license": "MIT",
+  "description": "",
+  "keywords": [
+    "angular",
+    "youtube",
+    "player"
+  ],
+  "homepage": "https://github.com/XuPeiYao/ngx-ytplayer",
+  "peerDependencies": {
+    "@angular/core": ">=5.0.0",
+    "@angular/common": ">=5.0.0"
+  },
+  "ngPackage": {
+    "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
+    "lib": {
+      "entryFile": "public_api.ts"
+    },
+    "dest": "../dist"
+  }
+}
