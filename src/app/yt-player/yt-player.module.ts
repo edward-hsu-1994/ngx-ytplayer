@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { YtPlayerDirective } from './directives/yt-player.directive';
+import { YtPlayerDirective } from './directives';
 
 @NgModule({
   imports: [CommonModule],
